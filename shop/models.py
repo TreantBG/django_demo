@@ -1,8 +1,9 @@
-from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import ImageField
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFill
+
+from django_demo import settings
 
 
 class Category(models.Model):
@@ -30,7 +31,10 @@ class Product(models.Model):
 
 class Order(models.Model):
     order_date = models.DateTimeField('date ordered')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     delivery_detiles = models.CharField(max_length=400)
     cost = models.FloatField(default=0)
+    products = models.ManyToManyField(Product, blank=True)
+
+class Cart(models.Model):
     products = models.ManyToManyField(Product, blank=True)

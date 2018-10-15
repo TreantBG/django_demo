@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'imagekit',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -114,10 +115,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+STATIC_ROOT2 = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
-MEDIA_URL_ = '/media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = 'media/'
 
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+AUTH_USER_MODEL = 'accounts.UserProfile'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')]

@@ -1,2 +1,3 @@
 django
 django-imagekit
+django-crispy-forms
