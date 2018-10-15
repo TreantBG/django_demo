@@ -4,8 +4,8 @@ from django.db import models
 
 from shop.models import Cart
 
-class CustomUserManager(BaseUserManager):
 
+class CustomUserManager(BaseUserManager):
     """Custom manager for EmailUser."""
 
     def _create_user(self, email, password,
@@ -67,3 +67,6 @@ class UserProfile(AbstractUser):
 
     class Meta(AbstractUser.Meta):
         swappable = 'AUTH_USER_MODEL'
+
+    def __str__(self):
+        return self.username

@@ -8,37 +8,70 @@
 <div class="container">
 
     {% if user.is_authenticated %}
-    <div class="row">
-        {% for product in user.cart.products.all %}
-        <div class="col-md-4">
-            <figure class="card card-product">
-                <div class="img-wrap"><img src="{{ product.image.url }}"></div>
-                <figcaption class="info-wrap">
-                    <h4 class="title">Another name of item</h4>
-                    <p class="desc">Some small description goes here</p>
-                    <div class="rating-wrap">
-                        <div class="label-rating">132 reviews</div>
-                        <div class="label-rating">154 orders</div>
-                    </div> <!-- rating-wrap.// -->
-                </figcaption>
-                <div class="bottom-wrap">
-                    <a href="" class="btn btn-sm btn-primary float-right">Order Now</a>
-                    <div class="price-wrap h5">
-                        <span class="price-new">$1280</span>
-                        <del class="price-old">$1980</del>
-                    </div> <!-- price-wrap.// -->
-                </div> <!-- bottom-wrap.// -->
-            </figure>
-        </div>
-        {% endfor %}
+
+
+    <div class="card">
+        <table class="table table-hover shopping-cart-wrap">
+            <thead class="text-muted">
+            <tr>
+                <th scope="col">Product</th>
+                <th scope="col" width="120">Quantity</th>
+                <th scope="col" width="120">Price</th>
+                <th scope="col" width="200" class="text-right">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if user.cart.products.all|length == 0 %}
+            <tr>
+                <td colspan="4" class="text-center"><h6 class="title text-truncate">Your cart is empty go shopping </h6>
+                </td>
+            </tr>
+            {% endif %}
+            {% for product_in_cart in user.cart.products.all %}
+            <tr>
+                <td>
+                    <figure class="media">
+                        <div class="img-wrap"><img src="{{ product_in_cart.product.thumbnail.url }}"
+                                                   class="img-thumbnail img-sm"></div>
+                        <figcaption class="media-body">
+                            <h6 class="title text-truncate">{{ product_in_cart.product.name }}</h6>
+                            <dl class="param param-inline small">
+                                {{ product_in_cart.product.description }}
+                            </dl>
+                        </figcaption>
+                    </figure>
+                </td>
+                <td>
+                    <h6 class="title text-truncate">{{ product_in_cart.quantity }}</h6>
+                </td>
+                <td>
+                    <div class="price-wrap">
+                        <var class="price">${{ product_in_cart.line_total }}</var>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <a href="{% url 'remove_from_cart' product_in_cart.product.id %}" class="btn btn-outline-danger"> × Remove</a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
-    {% else %}
 
-    <p>You are not logged in</p>
-    <a href="{% url 'login' %}">login</a> or
-    <a href="{% url 'signup' %}">register</a>
-
+    {% if user.cart.products.all|length > 0 %}
+    <div class="float-sm-right mt-2">
+        <h4 class="title text-truncate">Total Cost: {{ total_cost }}</h4>
+        <a href="{% url 'checkout' %}" class="btn btn-primary btn-lg" type="submit">Checkout order</a>
+    </div>
     {% endif %}
+</div>
+{% else %}
+
+<p>You are not logged in</p>
+<a href="{% url 'login' %}">login</a> or
+<a href="{% url 'signup' %}">register</a>
+
+{% endif %}
 </div>
 
 {% endblock %}

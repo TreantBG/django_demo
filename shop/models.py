@@ -28,6 +28,9 @@ class Product(models.Model):
                                format='JPEG',
                                options={'quality': 60})
 
+    def __str__(self):
+        return self.name
+
 
 class Order(models.Model):
     order_date = models.DateTimeField('date ordered')
@@ -36,5 +39,16 @@ class Order(models.Model):
     cost = models.FloatField(default=0)
     products = models.ManyToManyField(Product, blank=True)
 
+    def __str__(self):
+        return "User " + str(self.user) + " ordered $" + str(self.cost) + " on " + str(self.order_date)
+
+
+class ProductsInCart(models.Model):
+    product = models.ForeignKey('Product', blank=False, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+
+    def line_total(self):
+        return self.product.price * self.quantity
+
 class Cart(models.Model):
-    products = models.ManyToManyField(Product, blank=True)
+    products = models.ManyToManyField(ProductsInCart, blank=True)
